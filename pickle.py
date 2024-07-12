@@ -1,3 +1,6 @@
+import pickle
+
+
 class CountryState:
     def __init__(self):
         self.data = {}
@@ -12,7 +15,7 @@ class CountryState:
     def search_by_key(self, country):
         return self.data.get(country, "Страна не найдена")
 
-    def search_by_capital(self, capital):
+    def search_by_value(self, capital):
         for country, cap in self.data.items():
             if cap == capital:
                 return country
@@ -34,3 +37,20 @@ class CountryState:
             for line in lines:
                 country, capital = line.strip().split(':')
                 self.data[country] = capital
+
+
+country_state = CountryState()
+country_state.add_pair("Россия", "Москва")
+country_state.add_pair("США", "Вашингтон")
+country_state.add_pair("Франция", "Париж")
+
+print(country_state.search_by_key("Россия"))
+print(country_state.search_by_value("Париж"))
+
+country_state.edit_value("Россия", "Санкт-Петербург")
+print(country_state.search_by_key("Россия"))
+
+country_state.save_data("country_state.txt")
+country_state.data = {}
+country_state.load_data("country_state.txt")
+print(country_state.search_by_key("Россия"))
