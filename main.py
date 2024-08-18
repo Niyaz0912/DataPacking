@@ -26,19 +26,15 @@ class CountryState:
             self.data[country] = new_capital
 
     def save_data(self, file_name):
-        with open(file_name, 'w') as file:
-            for country, capital in self.data.items():
-                file.write(f"{country}:{capital}\n")
+        with open(file_name, 'wb') as file:  # Открываем файл в бинарном режиме
+            pickle.dump(self.data, file)  # Сериализуем данные с помощью pickle
 
     def load_data(self, file_name):
-        with open(file_name, 'r') as file:
-            lines = file.readlines()
-            self.data = {}
-            for line in lines:
-                country, capital = line.strip().split(':')
-                self.data[country] = capital
+        with open(file_name, 'rb') as file:  # Открываем файл в бинарном режиме
+            self.data = pickle.load(file)  # Десериализуем данные с помощью pickle
 
 
+# Пример использования
 country_state = CountryState()
 country_state.add_pair("Россия", "Москва")
 country_state.add_pair("США", "Вашингтон")
@@ -50,7 +46,8 @@ print(country_state.search_by_value("Париж"))
 country_state.edit_value("Россия", "Санкт-Петербург")
 print(country_state.search_by_key("Россия"))
 
-country_state.save_data("country_state.txt")
-country_state.data = {}
-country_state.load_data("country_state.txt")
+# Сохраняем данные в файл с использованием pickle
+country_state.save_data("country_state.pkl")  # Изменено на .pkl для ясности
+country_state.data = {}  # Очищаем данные
+country_state.load_data("country_state.pkl")  # Загружаем данные из файла
 print(country_state.search_by_key("Россия"))
